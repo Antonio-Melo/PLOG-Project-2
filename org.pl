@@ -31,12 +31,15 @@ readFile:-
 	write(NumberofDifferentTables),
 	number(NumberofDifferentTables),
 
-	readPersons(Fd),
+	readPersons(Fd,ListofPersons,NumberofPersons),
+	write(ListofPersons),
 	close(Fd).
 
-readPersons(Fd):-
+readPersons(Fd,[X|[]],NumberofPersons):-
+	readPerson(Fd,X).
+readPerson(Fd,[Name|Religion]):-
 	read(Fd,Name),
-	write(Name).
+	read(Fd,Religion).
 
 
 % Clear Screen %
