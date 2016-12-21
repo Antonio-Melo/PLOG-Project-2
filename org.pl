@@ -17,21 +17,26 @@ readFile:-
 	open('Input.txt',read,Fd),
 	% Number of Persons %
   read(Fd,NumberofPersons),
-  write(NumberofPersons),
+  write(NumberofPersons),nl,
 	number(NumberofPersons),
 
 	% Number of Groups %
 	read(Fd,NumberofGroups),
-	write(NumberofGroups),
+	write(NumberofGroups),nl,
 	number(NumberofGroups),
 
 	% Number of Different Tables %
 	read(Fd,NumberofDifferentTables),
-	write(NumberofDifferentTables),
+	write(NumberofDifferentTables),nl,
 	number(NumberofDifferentTables),
 
 	readPersons(Fd,ListofPersons,NumberofPersons),
-	write(ListofPersons),
+	readGroups(Fd,ListofGroups,NumberofGroups),
+	readTables(Fd,ListofTables,NumberofDifferentTables),
+	write(ListofPersons),nl,
+	write(ListofGroups),nl,
+	write(ListofTables),nl,
+
 	close(Fd).
 %-------------------Read Persons--------------%
 readPersons(Fd,[],0).
@@ -46,6 +51,26 @@ readPerson(Fd,[X|Xs],N):-
 	NextN is N - 1,
 	readPerson(Fd,Xs,NextN).
 
+%------------------Read Groups----------------%
+readGroups(Fd,[],0).
+readGroups(Fd,[X|Xs],NumberofGroups):-
+	readGroup(Fd,X),
+	NextN is NumberofGroups -1,
+	readGroups(Fd,Xs,NextN).
+
+readGroup(Fd,[X|Xs]):-
+	read(Fd,X),
+	readPersons(Fd,Xs,X).
+%-----------------Read Tables-----------------%
+readTables(Fd,[],0).
+readTables(Fd,[X|Xs],NumberofDifferentTables):-
+	readTable(Fd,X),
+	NextN is NumberofDifferentTables -1,
+	readTables(Fd,Xs,NextN).
+
+readTable(Fd,[X,Xs]):-
+	read(Fd,X),
+	read(Fd,Xs).
 
 %-------------------Clear Screen--------------%
 clearScreen(0).
