@@ -1,8 +1,9 @@
-%LIBRARIES
+%--------------------LIBRARIES----------------%
+:- prolog:set_current_directory('C:/Users/Antonio/Desktop/PLOG-Project-2').
 :- use_module(library(clpfd)).
 :- use_module(library(lists)).
 
-%Starting function
+%--------------------Starting function--------%
 org:-
 	clearScreen(40),
 	write(' Welcome to Dinner Organizer!!\n By:Antonio Melo & Ariana Fernandes\n\n'),
@@ -11,9 +12,7 @@ org:-
 	readFile.
 
 
-
-
-% Read File %
+%--------------------Read File----------------%
 readFile:-
 	open('Input.txt',read,Fd),
 	% Number of Persons %
@@ -34,14 +33,20 @@ readFile:-
 	readPersons(Fd,ListofPersons,NumberofPersons),
 	write(ListofPersons),
 	close(Fd).
+%-------------------Read Persons--------------%
+readPersons(Fd,[],0).
+readPersons(Fd,[X|Xs],NumberofPersons):-
+	readPerson(Fd,X,4),
+	NextN is NumberofPersons - 1,
+	readPersons(Fd,Xs,NextN).
 
-readPersons(Fd,[X|[]],NumberofPersons):-
-	readPerson(Fd,X).
-readPerson(Fd,[Name|Religion]):-
-	read(Fd,Name),
-	read(Fd,Religion).
+readPerson(Fd,[],0).
+readPerson(Fd,[X|Xs],N):-
+	read(Fd,X),
+	NextN is N - 1,
+	readPerson(Fd,Xs,NextN).
 
 
-% Clear Screen %
+%-------------------Clear Screen--------------%
 clearScreen(0).
 clearScreen(N):- nl, N1 is N-1, clearScreen(N1).
