@@ -1,5 +1,5 @@
 %--------------------LIBRARIES----------------%
-:- prolog:set_current_directory('C:/Users/Antonio/Desktop/PLOG-Project-2').
+:- prolog:set_current_directory('C:/Users/AntonioMelo/Desktop/PLOG-Project-2').
 :- use_module(library(clpfd)).
 :- use_module(library(lists)).
 
@@ -14,30 +14,36 @@ org:-
 	write('Number of persons: '),write(NumberofPersons),nl,
 	write('Number of groups: '),write(NumberofGroups),nl,
 	write('Number of different tables: '),write(NumberofDifferentTables),nl,
-	write(ListofPersons),nl,
-	write(ListofGroups),nl,
-	write(ListofTables),nl,
+	write('Persons: '),write(ListofPersons),nl,
+	write('Groups: '),write(ListofGroups),nl,
+	write('Types of tables: '),write(ListofTables),nl,
 	
 	checkSeats(NumberofPersons,ListofGroups,ListofTables),
-	createListToFillTables(ListofTables,Tables),
+	createListToFillTables(ListofTables,TempTables,Tables),
 	write(Tables).
 	
 %------------Create Vector of Tables----------%
-createListToFillTables([],[]).
-createListToFillTables([T|Ts],[E|Es]):-
+
+createListToFillTables([],_,Tables):- append([],[],Tables).
+createListToFillTables([T|Ts],[E|Es],Tables):-
 	nth0(0,T,NumberofTableSeats),
-	write(NumberofTableSeats),nl,
+	%write(NumberofTableSeats),nl,
 	nth0(1,T,NumberofTables),
-	write(NumberofTables),nl,
+	%write(NumberofTables),nl,
 	createTable(E,NumberofTableSeats,NumberofTables),
-	createListToFillTables(Ts,Es).
+	%write(T),nl,
+	%write(E),nl,
+	%write(Tables),nl,
+	createListToFillTables(Ts,Es,NewTables),
+	%write(NewTables),nl,
+	%write('Vou fazer append'),nl,
+	append(E,NewTables,Tables).
 
 createTable([],_,0).	
-createTable(E,NumberofTableSeats,NumberofTables):-
-	createTable(NewE,NumberofTableSeats,NewNumberofTables),
-	NewNumberofTables is NumberofTables - 1,
-	build(0,NumberofTableSeats,ListofTable),
-	append(E,ListofTable,NewE).
+createTable([E|Es],NumberofTableSeats,NumberofTables):-
+	NewNumberofTables is NumberofTables -1,
+	build(0,NumberofTableSeats,E),
+	createTable(Es,NumberofTableSeats,NewNumberofTables).
 
 build(_,0,[]).  
 build(X,N1,[X|L]) :- N1 > 0, N is N1 - 1, build(X,N,L). 
