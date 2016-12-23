@@ -18,23 +18,46 @@ org:-
 	write(ListofGroups),nl,
 	write(ListofTables),nl,
 	
-	checkSeats(NumberofPersons,ListofGroups,ListofTables).
+	checkSeats(NumberofPersons,ListofGroups,ListofTables),
+	createListToFillTables(ListofTables,Tables),
+	write(Tables).
 	
-%--------------checkPlaces--------------------%
+%------------Create Vector of Tables----------%
+createListToFillTables([],[]).
+createListToFillTables([T|Ts],[E|Es]):-
+	nth0(0,T,NumberofTableSeats),
+	write(NumberofTableSeats),nl,
+	nth0(1,T,NumberofTables),
+	write(NumberofTables),nl,
+	createTable(E,NumberofTableSeats,NumberofTables),
+	createListToFillTables(Ts,Es).
+
+createTable([],_,0).	
+createTable(E,NumberofTableSeats,NumberofTables):-
+	createTable(NewE,NumberofTableSeats,NewNumberofTables),
+	NewNumberofTables is NumberofTables - 1,
+	build(0,NumberofTableSeats,ListofTable),
+	append(E,ListofTable,NewE).
+
+build(_,0,[]).  
+build(X,N1,[X|L]) :- N1 > 0, N is N1 - 1, build(X,N,L). 
+build(X,N1,X):- N1>0, N1 is N - 1, build(X,N,[]).  
+
+%--------------Check Seats--------------------%
 checkSeats(NumberofPersons,ListofGroups,ListofTables):-
 	getNumberofPersonsinGroup(ListofGroups,NumberofPersonsinGroup),
-	write(NumberofPersonsinGroup),nl,
+	%write(NumberofPersonsinGroup),nl,
 	getTotalNumberofSeats(ListofTables,NumberofSeats),
-	write(NumberofSeats),nl,
+	%write(NumberofSeats),nl,
 	TotalNumberofPersons is NumberofPersons + NumberofPersonsinGroup,
 	TotalNumberofPersons > NumberofSeats,
 	write('Not Enough seats to alocate every one...\n').
 	
 checkSeats(NumberofPersons,ListofGroups,ListofTables):-
 	getNumberofPersonsinGroup(ListofGroups,NumberofPersonsinGroup),
-	write(NumberofPersonsinGroup),nl,
+	%write(NumberofPersonsinGroup),nl,
 	getTotalNumberofSeats(ListofTables,NumberofSeats),
-	write(NumberofSeats),nl,
+	%write(NumberofSeats),nl,
 	TotalNumberofPersons is NumberofPersons + NumberofPersonsinGroup,
 	TotalNumberofPersons =< NumberofSeats,
 	write('Enough seats to alocate every one...\n').
