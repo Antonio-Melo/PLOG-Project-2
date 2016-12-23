@@ -1,4 +1,5 @@
 # PLOG-Project-2
+Change the current_directory int org.pl
 
 In order to work you need to fill the Input.txt file with the follwing structure:
 * Number of persons
