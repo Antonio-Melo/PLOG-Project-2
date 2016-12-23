@@ -20,23 +20,19 @@ org:-
 	
 	checkSeats(NumberofPersons,ListofGroups,ListofTables),
 	createListToFillTables(ListofTables,TempTables,Tables),
-	write(Tables).
+	write(Tables),
+	fillTables(Tables).
+%---------------Fill Tables-------------------%
+fillTables(Tables).
 	
 %------------Create Vector of Tables----------%
 
 createListToFillTables([],_,Tables):- append([],[],Tables).
 createListToFillTables([T|Ts],[E|Es],Tables):-
 	nth0(0,T,NumberofTableSeats),
-	%write(NumberofTableSeats),nl,
 	nth0(1,T,NumberofTables),
-	%write(NumberofTables),nl,
 	createTable(E,NumberofTableSeats,NumberofTables),
-	%write(T),nl,
-	%write(E),nl,
-	%write(Tables),nl,
 	createListToFillTables(Ts,Es,NewTables),
-	%write(NewTables),nl,
-	%write('Vou fazer append'),nl,
 	append(E,NewTables,Tables).
 
 createTable([],_,0).	
