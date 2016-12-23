@@ -54,6 +54,9 @@ getTotalNumberofSeats([T|Ts],NumberofSeats):-
 	nth0(1,T,NumberofTables),
 	TempNumber is NumberofTableSeats * NumberofTables,
 	NumberofSeats is N2 + TempNumber.
+	
+	
+	
 
 %--------------------Read File----------------%
 readFile(NumberofPersons,NumberofGroups,NumberofDifferentTables,ListofPersons,ListofGroups,ListofTables):-
