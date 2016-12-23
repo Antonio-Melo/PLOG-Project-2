@@ -38,7 +38,7 @@ createListToFillTables([T|Ts],[E|Es],Tables):-
 createTable([],_,0).	
 createTable([E|Es],NumberofTableSeats,NumberofTables):-
 	NewNumberofTables is NumberofTables -1,
-	build(0,NumberofTableSeats,E),
+	build(_,NumberofTableSeats,E),
 	createTable(Es,NumberofTableSeats,NewNumberofTables).
 
 build(_,0,[]).  
