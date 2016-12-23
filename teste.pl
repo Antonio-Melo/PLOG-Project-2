@@ -7,14 +7,33 @@ jantar :-
     length(Tables, NrTables),
     length(People, NrPeople),
     length(PersonTable, NrPeople),
-    createCardinality(Tables, 0, Pairs),
-    global_cardinality(PersonTable, Pairs),
+	%createCardinality(Tables, 0, Pairs),
+	%write(Pairs),nl,
+    %global_cardinality(PersonTable, Pairs),
     domain(PersonTable, 0, NrTables),
+	
     labeling([], PersonTable),
     write(PersonTable).
 	%length(FinalTables,NrTables),
 	
-	
+zebra(Zeb,Agu) :-
+Nac = [Ing, Esp, Nor, Ucr, Por],
+Ani = [Cao, Rap, Igu, Cav, Zeb],
+Beb = [Sum, Cha, Caf, Lei, Agu],
+Cor = [Verm, Verd, Bran, Amar, Azul],
+Tab = [Che, Win, LS, SG, Mar],
+append([Nac,Ani,Beb,Cor,Tab], List),
+%
+domain(List,1,5),
+all_different(Nac), all_different(Ani), all_different(Beb),
+all_different(Cor), all_different(Tab),
+Ing #= Verm, Esp #= Cao, Nor #= 1, Amar #= Mar,
+abs(Che-Rap) #= 1, abs(Nor-Azul) #= 1,
+Win #= Igu, LS #= Sum, Ucr #= Cha, Por #= SG,
+abs(Mar-Cav) #= 1,
+Verd #= Caf, Verd #= Bran+1, Lei #= 3,
+%
+labeling([],List).	
 
 	
    
