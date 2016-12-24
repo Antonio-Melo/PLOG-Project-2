@@ -19,9 +19,10 @@ org:-
 	checkSeats(NumberofPersons,ListofTables),
 	createListToFillTables(ListofTables,TempTables,Tables),
 	write(Tables).
-	fillTables(NumberofPersons,ListofPersons,Tables).
+	%fillTables(NumberofPersons,ListofPersons,Tables).
 %---------------Fill Tables-------------------%
-fillTables(Tables).
+fillTables(NumberofPersons,ListofPersons,Tables).
+	
 %------------Create Vector of Tables----------%
 
 createListToFillTables([],_,Tables):- append([],[],Tables).
@@ -78,7 +79,7 @@ readFile(NumberofPersons,NumberofDifferentTables,ListofPersons,ListofTables):-
 %-------------------Read Persons--------------%
 readPersons(Fd,[],0).
 readPersons(Fd,[X|Xs],NumberofPersons):-
-	readPerson(Fd,X,2),
+	readPerson(Fd,X,3),
 	NextN is NumberofPersons - 1,
 	readPersons(Fd,Xs,NextN).
 
