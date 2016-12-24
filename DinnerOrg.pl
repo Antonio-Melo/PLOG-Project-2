@@ -19,7 +19,21 @@ org:-
 	getTotalNumberofSeats(ListofTables,NumberofTables),
 	length(Tables,NumberofTables),
 	write(Tables),nl,
-	fillTables(NumberofPersons,ListofPersons,NumberofTables,Tables).
+	fillTables(NumberofPersons,ListofPersons,NumberofTables,Tables),
+	printTables(Tables,ListofPersons).
+%---------------Print Tables------------------%
+printTables([],_):- nl.
+printTables([L,Li|Ls],ListofPersons):-
+	 getNameById(L,ListofPersons,Name),
+	 getNameById(Li,ListofPersons,Namei),
+	 write([Name,Namei]),nl,
+	 printTables(Ls,ListofPersons).
+	 
+%--------------------People-------------------%
+getNameById(Id,ListofPersons,Name):-
+	nth1(Id,ListofPersons,[Name,_,_,_]).
+	
+
 %---------------Fill Tables-------------------%
 fillTables(NumberofPersons,ListofPersons,NumberofTables,Tables):-
 	domain(Tables,1,NumberofPersons),
@@ -27,7 +41,7 @@ fillTables(NumberofPersons,ListofPersons,NumberofTables,Tables):-
 	write(NumberofTables),nl,
 	restrictions(Tables,1,NumberofTables,NumberofPersons,ListofPersons),
 	labeling([],Tables),
-	write(Tables).
+	write(Tables),nl.
 %----------------Restrictions-----------------%
 restrictions(Tables,Index,NumberofTables,NumberofPersons,ListofPersons):-
 	Index >= NumberofTables.
@@ -40,16 +54,12 @@ restrictions(Tables,Index,NumberofTables,NumberofPersons,ListofPersons):-
 	write(Pi),nl,
 	NextIndex is NextInd +1,
 	P #\= Pi,
-	nth1(P,ListofPersons,[N,Id,Int]),
+	nth1(P,ListofPersons,[N,Id,Int,H]),
 	write(Int),nl,
-	nth1(Pi,ListofPersons,[Ni,Idi,Inti]),
+	nth1(Pi,ListofPersons,[Ni,Idi,Inti,Hi]),
 	write(Inti),nl,
-	Int #= Inti,
+	Int #= Inti #\/ H #= Hi,
 	restrictions(Tables,NextIndex,NumberofTables,NumberofPersons,ListofPersons).
-	
-	
-	
-
 
 %--------------Check Seats--------------------%
 checkSeats(NumberofPersons,ListofTables):-
@@ -88,7 +98,7 @@ readFile(NumberofPersons,ListofPersons,ListofTables):-
 %-------------------Read Persons--------------%
 readPersons(Fd,[],0).
 readPersons(Fd,[X|Xs],NumberofPersons):-
-	readPerson(Fd,X,3),
+	readPerson(Fd,X,4),
 	NextN is NumberofPersons - 1,
 	readPersons(Fd,Xs,NextN).
 

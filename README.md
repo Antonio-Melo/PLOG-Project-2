@@ -6,7 +6,8 @@ In order to work you need to fill the Input.txt file with the follwing structure
 * Persons
 * * Name
 * * id 
-* * *  Casado-0 Solteiro-1
+* * *  Married-0 Single-1
+* * *  Surf -0  Football -1
 * Tables
 * * Number of persons per table
 * * * Number of tables with that size
