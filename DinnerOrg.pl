@@ -18,8 +18,9 @@ org:-
 	checkSeats(NumberofPersons,ListofTables),
 	getTotalNumberofSeats(ListofTables,NumberofTables),
 	length(Tables,NumberofTables),
-	write(Tables),nl,
+	%write(Tables),nl,
 	fillTables(NumberofPersons,ListofPersons,NumberofTables,Tables),
+	write('Printing Tables...'),nl,
 	printTables(Tables,ListofPersons).
 %---------------Print Tables------------------%
 printTables([],_):- nl.
@@ -38,7 +39,7 @@ getNameById(Id,ListofPersons,Name):-
 fillTables(NumberofPersons,ListofPersons,NumberofTables,Tables):-
 	domain(Tables,1,NumberofPersons),
 	all_different(Tables),
-	write(NumberofTables),nl,
+	%write(NumberofTables),nl,
 	restrictions(Tables,1,NumberofTables,NumberofPersons,ListofPersons),
 	labeling([],Tables),
 	write(Tables),nl.
@@ -48,16 +49,16 @@ restrictions(Tables,Index,NumberofTables,NumberofPersons,ListofPersons):-
 restrictions(Tables,Index,NumberofTables,NumberofPersons,ListofPersons):-
 	Index < NumberofTables,
 	element(Index,Tables,P),
-	write(P),nl,
+	%write(P),nl,
 	NextInd is Index +1,
 	element(NextInd,Tables,Pi),
-	write(Pi),nl,
+	%write(Pi),nl,
 	NextIndex is NextInd +1,
 	P #\= Pi,
 	nth1(P,ListofPersons,[N,Id,GId,Int,H]),
-	write(Int),nl,
+	%write(Int),nl,
 	nth1(Pi,ListofPersons,[Ni,Idi,GIdi,Inti,Hi]),
-	write(Inti),nl,
+	%write(Inti),nl,
 	(GId \= 0 -> GId #= GIdi;Int #= Inti #\/ H #= Hi),
 	restrictions(Tables,NextIndex,NumberofTables,NumberofPersons,ListofPersons).
 
