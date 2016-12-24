@@ -40,9 +40,11 @@ restrictions(Tables,Index,NumberofTables,NumberofPersons,ListofPersons):-
 	write(Pi),nl,
 	NextIndex is NextInd +1,
 	P #\= Pi,
-	P #\= 1,
-	nth0(P,ListofPersons,Person),
-	write(Person),nl,
+	nth1(P,ListofPersons,[N,Id,Int]),
+	write(Int),nl,
+	nth1(Pi,ListofPersons,[Ni,Idi,Inti]),
+	write(Inti),nl,
+	Int #= Inti,
 	restrictions(Tables,NextIndex,NumberofTables,NumberofPersons,ListofPersons).
 	
 	
