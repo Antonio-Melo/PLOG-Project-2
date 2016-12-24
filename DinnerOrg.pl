@@ -1,5 +1,5 @@
 %--------------------LIBRARIES----------------%
-:- prolog:set_current_directory('C:/Users/AntonioMelo/Desktop/PLOG-Project-2').
+:- prolog:set_current_directory('C:/Users/Antonio/Desktop/PLOG-Project-2').
 :- use_module(library(clpfd)).
 :- use_module(library(lists)).
 
@@ -12,19 +12,14 @@ org:-
 	readFile(NumberofPersons,NumberofDifferentTables,ListofPersons,ListofTables),
 	write('File read successfully!\n'),
 	write('Number of persons: '),write(NumberofPersons),nl,
-	%write('Number of groups: '),write(NumberofGroups),nl,
 	write('Number of different tables: '),write(NumberofDifferentTables),nl,
 	write('Persons: '),write(ListofPersons),nl,
-	%write('Groups: '),write(ListofGroups),nl,
 	write('Types of tables: '),write(ListofTables),nl,
 	
-	checkSeats(NumberofPersons,ListofGroups,ListofTables),
+	checkSeats(NumberofPersons,ListofTables),
 	createListToFillTables(ListofTables,TempTables,Tables),
-	write(Tables),
-	fillTables(Tables).
-%---------------Fill Tables-------------------%
-fillTables(Tables).
-	
+	write(Tables).
+	%fillTables(Tables).
 %------------Create Vector of Tables----------%
 
 createListToFillTables([],_,Tables):- append([],[],Tables).
@@ -44,33 +39,16 @@ createTable([E|Es],NumberofTableSeats,NumberofTables):-
 build(_,0,[]).  
 build(X,N1,[X|L]) :- N1 > 0, N is N1 - 1, build(X,N,L). 
 build(X,N1,X):- N1>0, N1 is N - 1, build(X,N,[]).  
-
 %--------------Check Seats--------------------%
-checkSeats(NumberofPersons,ListofGroups,ListofTables):-
-	getNumberofPersonsinGroup(ListofGroups,NumberofPersonsinGroup),
-	%write(NumberofPersonsinGroup),nl,
+checkSeats(NumberofPersons,ListofTables):-
 	getTotalNumberofSeats(ListofTables,NumberofSeats),
-	%write(NumberofSeats),nl,
-	TotalNumberofPersons is NumberofPersons + NumberofPersonsinGroup,
-	TotalNumberofPersons > NumberofSeats,
+	NumberofPersons > NumberofSeats,
 	write('Not Enough seats to alocate every one...\n').
 	
-checkSeats(NumberofPersons,ListofGroups,ListofTables):-
-	getNumberofPersonsinGroup(ListofGroups,NumberofPersonsinGroup),
-	%write(NumberofPersonsinGroup),nl,
+checkSeats(NumberofPersons,ListofTables):-
 	getTotalNumberofSeats(ListofTables,NumberofSeats),
-	%write(NumberofSeats),nl,
-	TotalNumberofPersons is NumberofPersons + NumberofPersonsinGroup,
-	TotalNumberofPersons =< NumberofSeats,
+	NumberofPersons =< NumberofSeats,
 	write('Enough seats to alocate every one...\n').
-
-%-------------------Groups--------------------%
-getNumberofPersonsinGroup([],0).
-getNumberofPersonsinGroup([G|Gs],NumberofPersonsinGroup):-
-	getNumberofPersonsinGroup(Gs,N2),
-	nth0(0,G,Num),
-	%write(Num).
-	NumberofPersonsinGroup is N2 + Num.
 %-------------------Tables-------------------%
 getTotalNumberofSeats([],0).
 getTotalNumberofSeats([T|Ts],NumberofSeats):-
@@ -78,37 +56,27 @@ getTotalNumberofSeats([T|Ts],NumberofSeats):-
 	nth0(0,T,NumberofTableSeats),
 	nth0(1,T,NumberofTables),
 	TempNumber is NumberofTableSeats * NumberofTables,
-	NumberofSeats is N2 + TempNumber.
-	
-	
-	
-
+	NumberofSeats is N2 + TempNumber.	
 %--------------------Read File----------------%
-readFile(NumberofPersons,,NumberofDifferentTables,ListofPersons,ListofTables):-
+readFile(NumberofPersons,NumberofDifferentTables,ListofPersons,ListofTables):-
 	open('Input.txt',read,Fd),
 	% Number of Persons %
 	read(Fd,NumberofPersons),
 	number(NumberofPersons),
 
-	% Number of Groups %
-	%read(Fd,NumberofGroups),
-	%write(NumberofGroups),nl,
-	%number(NumberofGroups),
-
 	% Number of Different Tables %
 	read(Fd,NumberofDifferentTables),
-	%write(NumberofDifferentTables),nl,
 	number(NumberofDifferentTables),
 
 	readPersons(Fd,ListofPersons,NumberofPersons),
-	%readGroups(Fd,ListofGroups,NumberofGroups),
 	readTables(Fd,ListofTables,NumberofDifferentTables),
 
 	close(Fd).
+	
 %-------------------Read Persons--------------%
 readPersons(Fd,[],0).
 readPersons(Fd,[X|Xs],NumberofPersons):-
-	readPerson(Fd,X,4),
+	readPerson(Fd,X,2),
 	NextN is NumberofPersons - 1,
 	readPersons(Fd,Xs,NextN).
 
@@ -117,17 +85,6 @@ readPerson(Fd,[X|Xs],N):-
 	read(Fd,X),
 	NextN is N - 1,
 	readPerson(Fd,Xs,NextN).
-
-%------------------Read Groups----------------%
-readGroups(Fd,[],0).
-readGroups(Fd,[X|Xs],NumberofGroups):-
-	readGroup(Fd,X),
-	NextN is NumberofGroups -1,
-	readGroups(Fd,Xs,NextN).
-
-readGroup(Fd,[X|Xs]):-
-	read(Fd,X),
-	readPersons(Fd,Xs,X).
 %-----------------Read Tables-----------------%
 readTables(Fd,[],0).
 readTables(Fd,[X|Xs],NumberofDifferentTables):-
@@ -138,7 +95,6 @@ readTables(Fd,[X|Xs],NumberofDifferentTables):-
 readTable(Fd,[X,Xs]):-
 	read(Fd,X),
 	read(Fd,Xs).
-
 %-------------------Clear Screen--------------%
 clearScreen(0).
 clearScreen(N):- nl, N1 is N-1, clearScreen(N1).
