@@ -31,7 +31,7 @@ printTables([L,Li|Ls],ListofPersons):-
 	 
 %--------------------People-------------------%
 getNameById(Id,ListofPersons,Name):-
-	nth1(Id,ListofPersons,[Name,_,_,_]).
+	nth1(Id,ListofPersons,[Name,_,_,_,_]).
 	
 
 %---------------Fill Tables-------------------%
@@ -54,11 +54,11 @@ restrictions(Tables,Index,NumberofTables,NumberofPersons,ListofPersons):-
 	write(Pi),nl,
 	NextIndex is NextInd +1,
 	P #\= Pi,
-	nth1(P,ListofPersons,[N,Id,Int,H]),
+	nth1(P,ListofPersons,[N,Id,GId,Int,H]),
 	write(Int),nl,
-	nth1(Pi,ListofPersons,[Ni,Idi,Inti,Hi]),
+	nth1(Pi,ListofPersons,[Ni,Idi,GIdi,Inti,Hi]),
 	write(Inti),nl,
-	Int #= Inti #\/ H #= Hi,
+	(GId \= 0 -> GId #= GIdi;Int #= Inti #\/ H #= Hi),
 	restrictions(Tables,NextIndex,NumberofTables,NumberofPersons,ListofPersons).
 
 %--------------Check Seats--------------------%
@@ -98,7 +98,7 @@ readFile(NumberofPersons,ListofPersons,ListofTables):-
 %-------------------Read Persons--------------%
 readPersons(Fd,[],0).
 readPersons(Fd,[X|Xs],NumberofPersons):-
-	readPerson(Fd,X,4),
+	readPerson(Fd,X,5),
 	NextN is NumberofPersons - 1,
 	readPersons(Fd,Xs,NextN).
 
