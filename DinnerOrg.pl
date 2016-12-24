@@ -19,7 +19,9 @@ org:-
 	checkSeats(NumberofPersons,ListofTables),
 	createListToFillTables(ListofTables,TempTables,Tables),
 	write(Tables).
-	%fillTables(Tables).
+	fillTables(NumberofPersons,ListofPersons,Tables).
+%---------------Fill Tables-------------------%
+fillTables(Tables).
 %------------Create Vector of Tables----------%
 
 createListToFillTables([],_,Tables):- append([],[],Tables).
