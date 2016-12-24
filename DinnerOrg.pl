@@ -18,7 +18,6 @@ org:-
 	checkSeats(NumberofPersons,ListofTables),
 	getTotalNumberofSeats(ListofTables,NumberofTables),
 	length(Tables,NumberofTables),
-	%write(Tables),nl,
 	fillTables(NumberofPersons,ListofPersons,NumberofTables,Tables),
 	write('Printing Tables...'),nl,
 	printTables(Tables,ListofPersons).
@@ -49,16 +48,12 @@ restrictions(Tables,Index,NumberofTables,NumberofPersons,ListofPersons):-
 restrictions(Tables,Index,NumberofTables,NumberofPersons,ListofPersons):-
 	Index < NumberofTables,
 	element(Index,Tables,P),
-	%write(P),nl,
 	NextInd is Index +1,
 	element(NextInd,Tables,Pi),
-	%write(Pi),nl,
 	NextIndex is NextInd +1,
 	P #\= Pi,
 	nth1(P,ListofPersons,[N,Id,GId,Int,H]),
-	%write(Int),nl,
 	nth1(Pi,ListofPersons,[Ni,Idi,GIdi,Inti,Hi]),
-	%write(Inti),nl,
 	(GId \= 0 -> GId #= GIdi;Int #= Inti #\/ H #= Hi),
 	restrictions(Tables,NextIndex,NumberofTables,NumberofPersons,ListofPersons).
 
@@ -86,10 +81,6 @@ readFile(NumberofPersons,ListofPersons,ListofTables):-
 	% Number of Persons %
 	read(Fd,NumberofPersons),
 	number(NumberofPersons),
-
-	% Number of Different Tables %
-	%read(Fd,NumberofDifferentTables),
-	%number(NumberofDifferentTables),
 
 	readPersons(Fd,ListofPersons,NumberofPersons),
 	readTables(Fd,ListofTables,1),
