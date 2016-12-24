@@ -9,39 +9,46 @@ org:-
 	write(' Welcome to Dinner Organizer!!\n By:Antonio Melo & Ariana Fernandes\n\n'),
 	write('Please read the README file before using this program in order to work!\n'),
 	write('Reading Input.txt file...\n'),
-	readFile(NumberofPersons,NumberofDifferentTables,ListofPersons,ListofTables),
+	readFile(NumberofPersons,ListofPersons,ListofTables),
 	write('File read successfully!\n'),
 	write('Number of persons: '),write(NumberofPersons),nl,
-	write('Number of different tables: '),write(NumberofDifferentTables),nl,
 	write('Persons: '),write(ListofPersons),nl,
 	write('Types of tables: '),write(ListofTables),nl,
 	
 	checkSeats(NumberofPersons,ListofTables),
-	createListToFillTables(ListofTables,TempTables,Tables),
-	write(Tables).
-	%fillTables(NumberofPersons,ListofPersons,Tables).
+	getTotalNumberofSeats(ListofTables,NumberofTables),
+	length(Tables,NumberofTables),
+	write(Tables),nl,
+	fillTables(NumberofPersons,ListofPersons,NumberofTables,Tables).
 %---------------Fill Tables-------------------%
-fillTables(NumberofPersons,ListofPersons,Tables).
+fillTables(NumberofPersons,ListofPersons,NumberofTables,Tables):-
+	domain(Tables,1,NumberofPersons),
+	all_different(Tables),
+	write(NumberofTables),nl,
+	restrictions(Tables,1,NumberofTables,NumberofPersons,ListofPersons),
+	labeling([],Tables),
+	write(Tables).
+%----------------Restrictions-----------------%
+restrictions(Tables,Index,NumberofTables,NumberofPersons,ListofPersons):-
+	Index >= NumberofTables.
+restrictions(Tables,Index,NumberofTables,NumberofPersons,ListofPersons):-
+	Index < NumberofTables,
+	element(Index,Tables,P),
+	write(P),nl,
+	NextInd is Index +1,
+	element(NextInd,Tables,Pi),
+	write(Pi),nl,
+	NextIndex is NextInd +1,
+	P #\= Pi,
+	P #\= 1,
+	nth0(P,ListofPersons,Person),
+	write(Person),nl,
+	restrictions(Tables,NextIndex,NumberofTables,NumberofPersons,ListofPersons).
 	
-%------------Create Vector of Tables----------%
+	
+	
 
-createListToFillTables([],_,Tables):- append([],[],Tables).
-createListToFillTables([T|Ts],[E|Es],Tables):-
-	nth0(0,T,NumberofTableSeats),
-	nth0(1,T,NumberofTables),
-	createTable(E,NumberofTableSeats,NumberofTables),
-	createListToFillTables(Ts,Es,NewTables),
-	append(E,NewTables,Tables).
 
-createTable([],_,0).	
-createTable([E|Es],NumberofTableSeats,NumberofTables):-
-	NewNumberofTables is NumberofTables -1,
-	build(_,NumberofTableSeats,E),
-	createTable(Es,NumberofTableSeats,NewNumberofTables).
-
-build(_,0,[]).  
-build(X,N1,[X|L]) :- N1 > 0, N is N1 - 1, build(X,N,L). 
-build(X,N1,X):- N1>0, N1 is N - 1, build(X,N,[]).  
 %--------------Check Seats--------------------%
 checkSeats(NumberofPersons,ListofTables):-
 	getTotalNumberofSeats(ListofTables,NumberofSeats),
@@ -61,18 +68,18 @@ getTotalNumberofSeats([T|Ts],NumberofSeats):-
 	TempNumber is NumberofTableSeats * NumberofTables,
 	NumberofSeats is N2 + TempNumber.	
 %--------------------Read File----------------%
-readFile(NumberofPersons,NumberofDifferentTables,ListofPersons,ListofTables):-
+readFile(NumberofPersons,ListofPersons,ListofTables):-
 	open('Input.txt',read,Fd),
 	% Number of Persons %
 	read(Fd,NumberofPersons),
 	number(NumberofPersons),
 
 	% Number of Different Tables %
-	read(Fd,NumberofDifferentTables),
-	number(NumberofDifferentTables),
+	%read(Fd,NumberofDifferentTables),
+	%number(NumberofDifferentTables),
 
 	readPersons(Fd,ListofPersons,NumberofPersons),
-	readTables(Fd,ListofTables,NumberofDifferentTables),
+	readTables(Fd,ListofTables,1),
 
 	close(Fd).
 	
